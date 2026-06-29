@@ -2,6 +2,20 @@
    MUNIRAJ K — PORTFOLIO SCRIPTS v2
    ============================================ */
 
+/* ===== EMAILJS INIT — Replace with your real keys ===== */
+// Sign up free at https://www.emailjs.com
+// Replace YOUR_PUBLIC_KEY, YOUR_SERVICE_ID, YOUR_TEMPLATE_ID below
+const EMAILJS_PUBLIC_KEY  = 'qklIRydyGAm9JApWV';   // from EmailJS → Account → API Keys
+const EMAILJS_SERVICE_ID  = 'service_t28iqy7';   // from EmailJS → Email Services
+const EMAILJS_TEMPLATE_ID = 'template_6w0atyy';  // from EmailJS → Email Templates
+
+(function initEmailJS() {
+  if (typeof emailjs !== 'undefined') {
+    emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+  }
+})();
+
+
 /* ===== ANIMATED PARTICLE BACKGROUND ===== */
 (function initCanvas() {
   const canvas = document.getElementById('bg-canvas');
@@ -200,18 +214,47 @@ function expandProjects() {
 }
 
 
-/* ===== CONTACT FORM ===== */
-function handleContactSubmit(e) {
+/* ===== CONTACT FORM — Formspree ===== */
+async function handleContactSubmit(e) {
   e.preventDefault();
-  const form = document.getElementById('contact-form');
+  const form    = document.getElementById('contact-form');
   const success = document.getElementById('form-success');
-  const btn  = document.getElementById('contact-submit-btn');
-  btn.querySelector('span').textContent = 'Sending...';
+  const btn     = document.getElementById('contact-submit-btn');
+  const btnSpan = btn.querySelector('span');
+
+  // Check Formspree ID is configured
+  const action = form.getAttribute('action');
+  if (!action || action.includes('YOUR_FORM_ID')) {
+    alert('⚠️ Please set up Formspree first! See instructions below.');
+    return;
+  }
+
+  btnSpan.textContent = 'Sending...';
   btn.disabled = true;
-  setTimeout(() => {
-    form.style.display = 'none';
-    success.style.display = 'flex';
-  }, 1200);
+
+  try {
+    const data = new FormData(form);
+    const res  = await fetch(action, {
+      method : 'POST',
+      body   : data,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (res.ok) {
+      form.style.display = 'none';
+      success.style.display = 'flex';
+    } else {
+      const json = await res.json();
+      const msg  = json.errors ? json.errors.map(e => e.message).join(', ') : 'Something went wrong.';
+      alert('❌ Error: ' + msg);
+      btnSpan.textContent = 'Send Message';
+      btn.disabled = false;
+    }
+  } catch (err) {
+    alert('❌ Network error. Please try again.');
+    btnSpan.textContent = 'Send Message';
+    btn.disabled = false;
+  }
 }
 
 
@@ -317,10 +360,46 @@ function closeReviewOnOverlay(e) {
 function sendReview() {
   const text    = document.getElementById('review-text').value.trim();
   const stars   = '★'.repeat(currentRating) + '☆'.repeat(5 - currentRating);
-  const subject = encodeURIComponent('Portfolio Review');
-  const body    = encodeURIComponent(`Rating: ${stars}\n\n${text || 'Great portfolio! Keep it up.'}`);
-  window.open(`mailto:kmuniraj234@gmail.com?subject=${subject}&body=${body}`, '_blank');
-  closeReview();
+  const btn     = document.getElementById('review-send-btn');
+  const btnSpan = btn.querySelector('span');
+
+  // Check if EmailJS is configured
+  if (EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY' || typeof emailjs === 'undefined') {
+    // Fallback to mailto if EmailJS not set up yet
+    const subject = encodeURIComponent('Portfolio Review');
+    const body    = encodeURIComponent(`Rating: ${stars}\n\n${text || 'Great portfolio! Keep it up.'}`);
+    window.open(`mailto:kmuniraj234@gmail.com?subject=${subject}&body=${body}`, '_blank');
+    closeReview();
+    return;
+  }
+
+  btnSpan.textContent = 'Sending...';
+  btn.disabled = true;
+
+  const templateParams = {
+    rating  : stars,
+    message : text || 'Great portfolio! Keep it up.',
+    from_name: 'Portfolio Visitor',
+  };
+
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+    .then(() => {
+      btnSpan.textContent = '✅ Sent!';
+      setTimeout(() => {
+        closeReview();
+        btn.disabled = false;
+        btnSpan.textContent = 'Send Review';
+      }, 1500);
+    })
+    .catch(() => {
+      // Fallback to mailto on error
+      const subject = encodeURIComponent('Portfolio Review');
+      const body    = encodeURIComponent(`Rating: ${stars}\n\n${text || 'Great portfolio! Keep it up.'}`);
+      window.open(`mailto:kmuniraj234@gmail.com?subject=${subject}&body=${body}`, '_blank');
+      closeReview();
+      btn.disabled = false;
+      btnSpan.textContent = 'Send Review';
+    });
 }
 
 
