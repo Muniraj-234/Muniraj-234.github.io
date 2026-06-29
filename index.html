@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Muniraj K - Full Stack Developer & Team Leader | B.Tech Computer Science at Mahendra Institute of Technology (Autonomous). Expert in Python, React, Node.js, MongoDB." />
+  <meta name="keywords" content="Muniraj K, Full Stack Developer, React Developer, Python Developer, Portfolio, Mahendra Institute of Technology" />
+  <meta name="author" content="Muniraj K" />
+  <meta property="og:title" content="Muniraj K | Full Stack Developer" />
+  <meta property="og:description" content="Results-driven Full Stack Developer & Team Leader building scalable MERN stack applications." />
+  <title>Muniraj K | Full Stack Developer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Animated Background Canvas -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- Floating Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Cursor Glow -->
+  <div class="cursor-glow" id="cursor-glow"></div>
+
+  <!-- ===== REVIEW POPUP MODAL ===== -->
+  <div class="review-overlay" id="review-overlay" onclick="closeReviewOnOverlay(event)">
+    <div class="review-popup glass-card">
+      <button class="review-close" onclick="closeReview()" aria-label="Close">✕</button>
+      <div class="review-stars" id="review-stars">
+        <button class="star-btn" data-star="1" onclick="setStars(1)" aria-label="1 star">★</button>
+        <button class="star-btn" data-star="2" onclick="setStars(2)" aria-label="2 stars">★</button>
+        <button class="star-btn" data-star="3" onclick="setStars(3)" aria-label="3 stars">★</button>
+        <button class="star-btn" data-star="4" onclick="setStars(4)" aria-label="4 stars">★</button>
+        <button class="star-btn" data-star="5" onclick="setStars(5)" aria-label="5 stars">★</button>
+      </div>
+      <h3>Enjoyed my portfolio?</h3>
+      <p>Your feedback means a lot to me — share your thoughts!</p>
+      <textarea id="review-text" placeholder="Write your review here... (optional)"></textarea>
+      <div class="review-actions">
+        <button class="btn btn-primary" onclick="sendReview()" id="review-send-btn">
+          <span>Send Review</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+        <button class="btn btn-ghost" onclick="closeReview()">No Thanks</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <!-- Like Button replacing M. logo -->
+    <div class="like-btn-wrap">
+      <button class="like-btn" id="like-btn" onclick="handleLike()" aria-label="Like this portfolio">
+        <svg class="heart-icon" id="heart-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        <span id="like-count">0</span>
+      </button>
+    </div>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#home" class="nav-link active" data-section="home">Home</a></li>
+      <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+      <li><a href="#skills" class="nav-link" data-section="skills">Skills</a></li>
+      <li><a href="#education" class="nav-link" data-section="education">Education</a></li>
+      <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
+      <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+    </ul>
+    <button class="nav-resume-btn" onclick="downloadResume()">
+      <span>Resume</span>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" id="mobile-menu">
+    <ul>
+      <li><a href="#home" class="mobile-nav-link" onclick="closeMobileMenu()">Home</a></li>
+      <li><a href="#about" class="mobile-nav-link" onclick="closeMobileMenu()">About</a></li>
+      <li><a href="#skills" class="mobile-nav-link" onclick="closeMobileMenu()">Skills</a></li>
+      <li><a href="#education" class="mobile-nav-link" onclick="closeMobileMenu()">Education</a></li>
+      <li><a href="#projects" class="mobile-nav-link" onclick="closeMobileMenu()">Projects</a></li>
+      <li><a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()">Contact</a></li>
+      <li><button class="mobile-resume-btn" onclick="downloadResume(); closeMobileMenu()">Download Resume</button></li>
+    </ul>
+  </div>
+
+  <!-- ===== SECTION: HOME ===== -->
+  <section id="home" class="section section-home">
+    <div class="home-content">
+      <div class="home-text">
+        <div class="greeting-badge">
+          <span class="badge-dot"></span>
+          <span>Available for opportunities</span>
+        </div>
+        <h1 class="home-title">
+          Hi, I'm <span class="gradient-name">Muniraj K</span>
+        </h1>
+        <div class="typewriter-wrap">
+          <span class="typewriter-prefix">I build </span>
+          <span class="typewriter-text" id="typewriter"></span>
+          <span class="typewriter-cursor">|</span>
+        </div>
+        <p class="home-desc">
+          A results-driven <strong>Full Stack Developer</strong>
+          specialized in building scalable MERN stack applications. Currently pursuing B.Tech Computer Science at
+          <strong>Mahendra Institute of Technology (Autonomous)</strong>.
+        </p>
+        <div class="home-actions">
+          <a href="#projects" class="btn btn-primary" id="view-projects-btn">
+            <span>View Projects</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </a>
+          <a href="#contact" class="btn btn-ghost" id="hire-me-btn">
+            <span>Hire Me</span>
+          </a>
+        </div>
+        <div class="social-links">
+          <a href="https://github.com/Muniraj-234" target="_blank" class="social-link" id="github-link" aria-label="GitHub">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/in/mr-muniraj-k-04bb21383/" target="_blank" class="social-link" id="linkedin-link" aria-label="LinkedIn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          </a>
+          <a href="mailto:kmuniraj234@gmail.com" class="social-link" id="email-link" aria-label="Email">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="home-visual">
+        <div class="profile-container">
+          <div class="profile-ring profile-ring-1"></div>
+          <div class="profile-ring profile-ring-2"></div>
+          <div class="profile-ring profile-ring-3"></div>
+          <div class="profile-glow"></div>
+          <div class="profile-img-wrap">
+            <img src="profile.png" alt="Muniraj K - Full Stack Developer" class="profile-img" id="profile-photo" />
+          </div>
+          <!-- Real logos for floating badges -->
+          <div class="floating-badge badge-react">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" class="badge-logo" alt="React" />
+            <span>React</span>
+          </div>
+          <div class="floating-badge badge-node">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" class="badge-logo" alt="Node.js" />
+            <span>Node.js</span>
+          </div>
+          <div class="floating-badge badge-py">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" class="badge-logo" alt="Python" />
+            <span>Python</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: ABOUT ===== -->
+  <section id="about" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">Who I Am</span>
+        <h2 class="section-title">About <span class="gradient-text">Me</span></h2>
+        <div class="title-line"></div>
+      </div>
+      <div class="about-grid">
+        <div class="about-img-col">
+          <div class="about-img-wrap glass-card">
+            <img src="about.png" alt="Muniraj K" class="about-img" onerror="this.src='profile.png'" />
+          </div>
+          <div class="about-stats">
+            <div class="stat-card glass-card">
+              <span class="stat-num" data-target="10">0</span><span class="stat-unit">+</span>
+              <span class="stat-label">Projects</span>
+            </div>
+            <div class="stat-card glass-card">
+              <span class="stat-num" data-target="0">0</span><span class="stat-unit">Yrs</span>
+              <span class="stat-label">Experience</span>
+            </div>
+            <div class="stat-card glass-card">
+              <span class="stat-num" data-target="100">0</span><span class="stat-unit">%</span>
+              <span class="stat-label">Dedication</span>
+            </div>
+          </div>
+        </div>
+        <div class="about-text-col">
+          <div class="about-description glass-card">
+            <h3>Passionate Developer &amp; Natural Team Leader</h3>
+            <p>
+              I'm <strong>Muniraj K</strong>, a dedicated Full Stack Developer currently pursuing
+              B.Tech in Computer Science at <strong>Mahendra Institute of Technology (Autonomous)</strong>.
+              I'm driven by a passion for creating seamless digital experiences that merge elegant
+              design with powerful functionality.
+            </p>
+            <p>
+              As a natural <strong>Team Leader</strong>, I excel at coordinating cross-functional
+              teams, breaking down complex problems, and delivering projects on time. My experience
+              spans the entire web development stack — from crafting pixel-perfect UIs to architecting
+              robust backend systems.
+            </p>
+            <p>
+              When I'm not coding, I'm exploring UI/UX design principles, learning new frameworks,
+              or contributing to collaborative projects that push the boundaries of what's possible
+              on the web.
+            </p>
+          </div>
+          <div class="about-highlights">
+            <div class="highlight-item glass-card">
+              <div class="highlight-icon-svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div>
+                <strong>Education</strong>
+                <span>B.Tech CSE — Mahendra Institute of Technology</span>
+              </div>
+            </div>
+            <div class="highlight-item glass-card">
+              <div class="highlight-icon-svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              </div>
+              <div>
+                <strong>Location</strong>
+                <span>Tamil Nadu, India</span>
+              </div>
+            </div>
+            <div class="highlight-item glass-card">
+              <div class="highlight-icon-svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div>
+                <strong>Role</strong>
+                <span>Full Stack Developer &amp; Team Leader</span>
+              </div>
+            </div>
+            <div class="highlight-item glass-card">
+              <div class="highlight-icon-svg">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              </div>
+              <div>
+                <strong>Email</strong>
+                <span>kmuniraj234@gmail.com</span>
+              </div>
+            </div>
+          </div>
+          <div class="about-links">
+            <a href="https://github.com/Muniraj-234" target="_blank" class="profile-link-btn glass-card" id="github-profile-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <div>
+                <strong>GitHub Profile</strong>
+                <small>View My Code</small>
+              </div>
+              <span class="link-arrow">→</span>
+            </a>
+            <a href="https://www.linkedin.com/in/mr-muniraj-k-04bb21383/" target="_blank" class="profile-link-btn glass-card" id="linkedin-profile-btn">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#0A66C2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              <div>
+                <strong>LinkedIn Profile</strong>
+                <small>Let's Connect</small>
+              </div>
+              <span class="link-arrow">→</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: SKILLS ===== -->
+  <section id="skills" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">What I Know</span>
+        <h2 class="section-title">My <span class="gradient-text">Skills</span></h2>
+        <div class="title-line"></div>
+      </div>
+
+      <div class="skills-categories">
+        <!-- Core / Major Skills — uniform tag style with real logos -->
+        <div class="skill-category">
+          <h3 class="category-title"><span class="cat-dot"></span> Core / Major Skills</h3>
+          <div class="skills-grid all-skills">
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg" class="skill-logo" alt="Python" />
+              <span>Python</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg" class="skill-logo" alt="HTML5" />
+              <span>HTML5</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" class="skill-logo" alt="CSS3" />
+              <span>CSS3</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" class="skill-logo" alt="JavaScript" />
+              <span>JavaScript</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" class="skill-logo" alt="React" />
+              <span>React</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mongodb/mongodb-original.svg" class="skill-logo" alt="MongoDB" />
+              <span>MongoDB</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/express/express-original.svg" class="skill-logo skill-logo-invert" alt="Express.js" />
+              <span>Express.js</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/nodejs/nodejs-original.svg" class="skill-logo" alt="Node.js" />
+              <span>Node.js</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Minor / Additional Skills -->
+        <div class="skill-category">
+          <h3 class="category-title"><span class="cat-dot"></span> Minor / Additional Skills</h3>
+          <div class="skills-grid all-skills">
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" class="skill-logo" alt="Java" />
+              <span>Java</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/figma/figma-original.svg" class="skill-logo" alt="Figma" />
+              <span>UI/UX & Figma</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" class="skill-logo" alt="SQL" />
+              <span>SQL</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/flutter/flutter-original.svg" class="skill-logo" alt="Flutter" />
+              <span>Flutter</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/dart/dart-original.svg" class="skill-logo" alt="Dart" />
+              <span>Dart</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tools & Soft Skills -->
+        <div class="skill-category">
+          <h3 class="category-title"><span class="cat-dot"></span> Tools &amp; Soft Skills</h3>
+          <div class="skills-grid all-skills tools-grid">
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/git/git-original.svg" class="skill-logo" alt="Git" />
+              <span>Git &amp; GitHub</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <svg class="skill-logo skill-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><polyline points="8 21 12 17 16 21"/><path d="M6 8h.01M9 8h6M6 11h.01M9 11h4"/></svg>
+              <span>MS Office</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <svg class="skill-logo skill-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Team Leadership</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <svg class="skill-logo skill-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Problem Solving</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <svg class="skill-logo skill-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+              <span>Communication</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <svg class="skill-logo skill-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
+              <span>Project Management</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: EDUCATION ===== -->
+  <section id="education" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">My Journey</span>
+        <h2 class="section-title">Edu<span class="gradient-text">cation</span></h2>
+        <div class="title-line"></div>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-header">
+              <div class="timeline-icon-svg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              </div>
+              <div>
+                <h3>B.Tech — Computer Science &amp; Engineering</h3>
+                <span class="timeline-institution">Mahendra Institute of Technology (Autonomous)</span>
+              </div>
+            </div>
+            <div class="timeline-body">
+              <p>Pursuing a comprehensive Computer Science degree with focus on software engineering,
+              data structures, algorithms, and modern web technologies. Active participant in
+              technical clubs and coding competitions.</p>
+              <div class="timeline-tags">
+                <span class="t-tag">Data Structures</span>
+                <span class="t-tag">Algorithms</span>
+                <span class="t-tag">Web Dev</span>
+                <span class="t-tag">DBMS</span>
+                <span class="t-tag">OS</span>
+              </div>
+            </div>
+            <div class="timeline-footer">
+              <span class="timeline-year">2024 — Present</span>
+              <span class="timeline-status current">Currently Enrolled</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-header">
+              <div class="timeline-icon-svg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+              </div>
+              <div>
+                <h3>Higher Secondary Education (12th)</h3>
+                <span class="timeline-institution">Tamil Nadu State Board</span>
+              </div>
+            </div>
+            <div class="timeline-body">
+              <p>Completed Higher Secondary with focus on Mathematics, Physics, and Computer Science.
+              Developed a strong analytical foundation and problem-solving mindset.</p>
+              <div class="timeline-tags">
+                <span class="t-tag">Mathematics</span>
+                <span class="t-tag">Physics</span>
+                <span class="t-tag">Computer Science</span>
+              </div>
+            </div>
+            <div class="timeline-footer">
+              <span class="timeline-year">2023 — 2025</span>
+              <span class="timeline-status completed">Completed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-card glass-card">
+            <div class="timeline-header">
+              <div class="timeline-icon-svg">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+              </div>
+              <div>
+                <h3>Secondary Education (10th)</h3>
+                <span class="timeline-institution">Tamil Nadu State Board</span>
+              </div>
+            </div>
+            <div class="timeline-body">
+              <p>Built a strong educational foundation with excellence in Science and Mathematics.
+              First exposure to programming concepts and logical thinking.</p>
+            </div>
+            <div class="timeline-footer">
+              <span class="timeline-year">2022 — 2023</span>
+              <span class="timeline-status completed">Completed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: PROJECTS ===== -->
+  <section id="projects" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">What I've Built</span>
+        <h2 class="section-title">My <span class="gradient-text">Projects</span></h2>
+        <div class="title-line"></div>
+      </div>
+
+      <!-- Initial 4 project cards -->
+      <div class="projects-grid" id="projects-grid">
+        <div class="project-card glass-card" id="proj-1">
+          <div class="project-header">
+            <div class="project-number">01</div>
+            <div class="project-links">
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </a>
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
+            </div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Project Alpha</h3>
+            <p class="project-desc">An exciting full-stack web application — details will be updated soon. Built with the MERN stack for high performance and scalability.</p>
+          </div>
+          <div class="project-tags">
+            <span class="p-tag">React</span>
+            <span class="p-tag">Node.js</span>
+            <span class="p-tag">MongoDB</span>
+          </div>
+        </div>
+
+        <div class="project-card glass-card" id="proj-2">
+          <div class="project-header">
+            <div class="project-number">02</div>
+            <div class="project-links">
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </a>
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
+            </div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Project Beta</h3>
+            <p class="project-desc">A powerful Python-based application with data processing capabilities, showcasing backend engineering and REST API skills.</p>
+          </div>
+          <div class="project-tags">
+            <span class="p-tag">Python</span>
+            <span class="p-tag">Express.js</span>
+            <span class="p-tag">API</span>
+          </div>
+        </div>
+
+        <div class="project-card glass-card" id="proj-3">
+          <div class="project-header">
+            <div class="project-number">03</div>
+            <div class="project-links">
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </a>
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
+            </div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Project Gamma</h3>
+            <p class="project-desc">A stunning UI/UX focused application built with modern design principles, integrating beautiful animations and interactive elements.</p>
+          </div>
+          <div class="project-tags">
+            <span class="p-tag">JavaScript</span>
+            <span class="p-tag">CSS3</span>
+            <span class="p-tag">UI/UX</span>
+          </div>
+        </div>
+
+        <div class="project-card glass-card" id="proj-4">
+          <div class="project-header">
+            <div class="project-number">04</div>
+            <div class="project-links">
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </a>
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
+            </div>
+          </div>
+          <div class="project-body">
+            <h3 class="project-title">Project Delta</h3>
+            <p class="project-desc">A cross-platform application built with Flutter and Dart, featuring real-time data sync and an intuitive user experience.</p>
+          </div>
+          <div class="project-tags">
+            <span class="p-tag">Flutter</span>
+            <span class="p-tag">Dart</span>
+            <span class="p-tag">Firebase</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- More Projects Button -->
+      <div class="more-projects-wrap" id="more-projects-wrap">
+        <button class="btn-more-projects" id="more-projects-btn" onclick="expandProjects()">
+          <span>More Projects</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+
+      <!-- Extra Projects (hidden initially, scrollable when expanded) -->
+      <div class="extra-projects" id="extra-projects">
+        <div class="extra-projects-grid">
+          <div class="project-card-sm glass-card">
+            <div class="proj-sm-header">
+              <span class="proj-sm-num">05</span>
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn-sm">Visit →</a>
+            </div>
+            <h4>Mini Tool #1</h4>
+            <p>A Python utility application — details coming soon.</p>
+            <div class="project-tags"><span class="p-tag">Python</span></div>
+          </div>
+          <div class="project-card-sm glass-card">
+            <div class="proj-sm-header">
+              <span class="proj-sm-num">06</span>
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn-sm">Visit →</a>
+            </div>
+            <h4>Web App #2</h4>
+            <p>A web-based solution — details coming soon.</p>
+            <div class="project-tags"><span class="p-tag">React</span><span class="p-tag">Node.js</span></div>
+          </div>
+          <div class="project-card-sm glass-card">
+            <div class="proj-sm-header">
+              <span class="proj-sm-num">07</span>
+              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn-sm">Visit →</a>
+            </div>
+            <h4>Dashboard #3</h4>
+            <p>An analytics dashboard — details coming soon.</p>
+            <div class="project-tags"><span class="p-tag">JavaScript</span><span class="p-tag">MongoDB</span></div>
+          </div>
+        </div>
+        <div class="github-all-wrap">
+          <a href="https://github.com/Muniraj-234" target="_blank" class="btn btn-ghost" id="github-all-btn">
+            View All on GitHub
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION: CONTACT ===== -->
+  <section id="contact" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <span class="section-tag">Get In Touch</span>
+        <h2 class="section-title">Contact <span class="gradient-text">Me</span></h2>
+        <div class="title-line"></div>
+        <p class="section-subtitle">Have a project in mind? Let's build something amazing together!</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <div class="contact-card glass-card" id="contact-email-card">
+            <!-- Same SVG icon style as home section social links -->
+            <div class="contact-icon-svg">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <h3>Email Me</h3>
+            <p>kmuniraj234@gmail.com</p>
+            <a href="mailto:kmuniraj234@gmail.com" class="contact-action-btn">Send Email →</a>
+          </div>
+          <div class="contact-card glass-card" id="contact-github-card">
+            <div class="contact-icon-svg">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+            </div>
+            <h3>GitHub</h3>
+            <p>github.com/Muniraj-234</p>
+            <a href="https://github.com/Muniraj-234" target="_blank" class="contact-action-btn">Visit Profile →</a>
+          </div>
+          <div class="contact-card glass-card" id="contact-linkedin-card">
+            <div class="contact-icon-svg">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+            </div>
+            <h3>LinkedIn</h3>
+            <p>mr-muniraj-k-04bb21383</p>
+            <a href="https://www.linkedin.com/in/mr-muniraj-k-04bb21383/" target="_blank" class="contact-action-btn">Connect →</a>
+          </div>
+        </div>
+        <div class="contact-form-wrap glass-card">
+          <h3>Send a Message</h3>
+          <form class="contact-form" id="contact-form" onsubmit="handleContactSubmit(event)">
+            <div class="form-group">
+              <label for="contact-name">Your Name</label>
+              <input type="text" id="contact-name" placeholder="John Doe" required autocomplete="name" />
+            </div>
+            <div class="form-group">
+              <label for="contact-email-input">Your Email</label>
+              <input type="email" id="contact-email-input" placeholder="john@example.com" required autocomplete="email" />
+            </div>
+            <div class="form-group">
+              <label for="contact-subject">Subject</label>
+              <input type="text" id="contact-subject" placeholder="Project Collaboration" required />
+            </div>
+            <div class="form-group">
+              <label for="contact-message">Message</label>
+              <textarea id="contact-message" rows="5" placeholder="Tell me about your project..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary full-width" id="contact-submit-btn">
+              <span>Send Message</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            </button>
+          </form>
+          <div class="form-success" id="form-success" style="display:none">
+            <div class="success-icon">✅</div>
+            <h4>Message Sent!</h4>
+            <p>Thanks for reaching out. I'll get back to you soon.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer — only copyright line -->
+  <footer class="footer">
+    <div class="footer-bottom">
+      <p>© 2026 Muniraj K</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
