@@ -3,18 +3,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Muniraj K - Full Stack Developer & Team Leader | B.Tech Computer Science at Mahendra Institute of Technology (Autonomous). Expert in Python, React, Node.js, MongoDB." />
-  <meta name="keywords" content="Muniraj K, Full Stack Developer, React Developer, Python Developer, Portfolio, Mahendra Institute of Technology" />
+  <meta name="description" content="Muniraj K - Full Stack Developer & Aspiring Generative AI Engineer | B.Tech Computer Science at Mahendra Institute of Technology (Autonomous). Building AI-powered web apps with Python, React, Node.js, MongoDB & Gemini." />
+  <meta name="keywords" content="Muniraj K, Full Stack Developer, Generative AI Engineer, React Developer, Python Developer, Portfolio, Mahendra Institute of Technology" />
   <meta name="author" content="Muniraj K" />
-  <meta property="og:title" content="Muniraj K | Full Stack Developer" />
-  <meta property="og:description" content="Results-driven Full Stack Developer & Team Leader building scalable MERN stack applications." />
-  <title>Muniraj K | Full Stack Developer</title>
+  <meta property="og:title" content="Muniraj K | Full Stack Developer & AI Engineer" />
+  <meta property="og:description" content="Results-driven Full Stack Developer & aspiring Generative AI Engineer building AI-powered MERN stack applications." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Muniraj K | Full Stack Developer & AI Engineer" />
+  <meta name="twitter:description" content="Results-driven Full Stack Developer & aspiring Generative AI Engineer building AI-powered MERN stack applications." />
+  <meta name="twitter:image" content="og-image.png" />
+  <meta name="theme-color" content="#0d0a1a" />
+  <title>Muniraj K | Full Stack Developer & AI Engineer</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
   <!-- EmailJS SDK for Review popup -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Supabase SDK for the real, shared like counter -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -72,6 +87,8 @@
       <li><a href="#education" class="nav-link" data-section="education">Education</a></li>
       <li><a href="#projects" class="nav-link" data-section="projects">Projects</a></li>
       <li><a href="#contact" class="nav-link" data-section="contact">Contact</a></li>
+      <!-- Update this once the blog is deployed live (currently points at the sibling local folder for testing) -->
+      <li><a href="../muniraj-blog/index.html" class="nav-link" target="_blank">Blog</a></li>
     </ul>
     <button class="nav-resume-btn" onclick="downloadResume()">
       <span>Resume</span>
@@ -91,6 +108,7 @@
       <li><a href="#education" class="mobile-nav-link" onclick="closeMobileMenu()">Education</a></li>
       <li><a href="#projects" class="mobile-nav-link" onclick="closeMobileMenu()">Projects</a></li>
       <li><a href="#contact" class="mobile-nav-link" onclick="closeMobileMenu()">Contact</a></li>
+      <li><a href="../muniraj-blog/index.html" class="mobile-nav-link" target="_blank">Blog</a></li>
       <li><button class="mobile-resume-btn" onclick="downloadResume(); closeMobileMenu()">Download Resume</button></li>
     </ul>
   </div>
@@ -112,8 +130,9 @@
           <span class="typewriter-cursor">|</span>
         </div>
         <p class="home-desc">
-          A results-driven <strong>Full Stack Developer</strong>
-          specialized in building scalable MERN stack applications. Currently pursuing B.Tech Computer Science at
+          A results-driven <strong>Full Stack Developer</strong> and aspiring
+          <strong>Generative AI Engineer</strong>, specialized in building scalable MERN stack
+          applications powered by modern AI. Currently pursuing B.Tech Computer Science at
           <strong>Mahendra Institute of Technology (Autonomous)</strong>.
         </p>
         <div class="home-actions">
@@ -175,7 +194,7 @@
       <div class="about-grid">
         <div class="about-img-col">
           <div class="about-img-wrap glass-card">
-            <img src="about.png" alt="Muniraj K" class="about-img" onerror="this.src='profile.png'" />
+            <img src="about.jpg" alt="Muniraj K" class="about-img" onerror="this.src='profile.png'" loading="lazy" />
           </div>
           <div class="about-stats">
             <div class="stat-card glass-card">
@@ -208,9 +227,9 @@
               robust backend systems.
             </p>
             <p>
-              When I'm not coding, I'm exploring UI/UX design principles, learning new frameworks,
-              or contributing to collaborative projects that push the boundaries of what's possible
-              on the web.
+              I'm also an aspiring <strong>Generative AI Engineer</strong> — actively earning
+              certifications in Gemini, Google AI Studio, and Microsoft Copilot, and building
+              AI-powered features (like the assistant on this page) into my projects.
             </p>
           </div>
           <div class="about-highlights">
@@ -328,6 +347,14 @@
           <h3 class="category-title"><span class="cat-dot"></span> Minor / Additional Skills</h3>
           <div class="skills-grid all-skills">
             <div class="skill-tag glass-card">
+              <svg class="skill-logo skill-logo-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+              <span>Generative AI</span>
+            </div>
+            <div class="skill-tag glass-card">
+              <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/googlecloud/googlecloud-original.svg" class="skill-logo" alt="Google Cloud" />
+              <span>Google Cloud &amp; Gemini</span>
+            </div>
+            <div class="skill-tag glass-card">
               <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg" class="skill-logo" alt="Java" />
               <span>Java</span>
             </div>
@@ -418,7 +445,7 @@
               </div>
             </div>
             <div class="timeline-footer">
-              <span class="timeline-year">2024 — Present</span>
+              <span class="timeline-year">2025 — 2029</span>
               <span class="timeline-status current">Currently Enrolled</span>
             </div>
           </div>
@@ -487,26 +514,26 @@
         <div class="title-line"></div>
       </div>
 
-      <!-- Initial 4 project cards -->
+      <!-- Real projects, pulled from github.com/Muniraj-234 -->
       <div class="projects-grid" id="projects-grid">
         <div class="project-card glass-card" id="proj-1">
           <div class="project-header">
             <div class="project-number">01</div>
             <div class="project-links">
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
+              <a href="https://github.com/Muniraj-234/nexora-sih2026" target="_blank" class="proj-icon-btn" aria-label="GitHub">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
               </a>
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
+              <a href="https://github.com/Muniraj-234/nexora-sih2026" target="_blank" class="proj-visit-btn">Code →</a>
             </div>
           </div>
           <div class="project-body">
-            <h3 class="project-title">Project Alpha</h3>
-            <p class="project-desc">An exciting full-stack web application — details will be updated soon. Built with the MERN stack for high performance and scalability.</p>
+            <h3 class="project-title">Nexora — Smart Waste Management</h3>
+            <p class="project-desc">Built for Smart India Hackathon 2026 — a full-stack waste management platform made up of three progressive web apps: a citizen app, a collector app, and a municipal dashboard.</p>
           </div>
           <div class="project-tags">
-            <span class="p-tag">React</span>
-            <span class="p-tag">Node.js</span>
-            <span class="p-tag">MongoDB</span>
+            <span class="p-tag">JavaScript</span>
+            <span class="p-tag">PWA</span>
+            <span class="p-tag">Hackathon</span>
           </div>
         </div>
 
@@ -514,20 +541,20 @@
           <div class="project-header">
             <div class="project-number">02</div>
             <div class="project-links">
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
+              <a href="https://github.com/Muniraj-234/MIT-CLUB" target="_blank" class="proj-icon-btn" aria-label="GitHub">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
               </a>
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
+              <a href="https://mit-club.vercel.app" target="_blank" class="proj-visit-btn">Visit →</a>
             </div>
           </div>
           <div class="project-body">
-            <h3 class="project-title">Project Beta</h3>
-            <p class="project-desc">A powerful Python-based application with data processing capabilities, showcasing backend engineering and REST API skills.</p>
+            <h3 class="project-title">MIT Club Platform</h3>
+            <p class="project-desc">A full-stack website for my college tech club, live in production — with a Supabase backend for data and member/event management.</p>
           </div>
           <div class="project-tags">
-            <span class="p-tag">Python</span>
-            <span class="p-tag">Express.js</span>
-            <span class="p-tag">API</span>
+            <span class="p-tag">JavaScript</span>
+            <span class="p-tag">Supabase</span>
+            <span class="p-tag">Live</span>
           </div>
         </div>
 
@@ -535,90 +562,29 @@
           <div class="project-header">
             <div class="project-number">03</div>
             <div class="project-links">
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
+              <a href="https://github.com/Muniraj-234/flappy-bird" target="_blank" class="proj-icon-btn" aria-label="GitHub">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
               </a>
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
+              <a href="https://muniraj-234.github.io/flappy-bird/" target="_blank" class="proj-visit-btn">Play →</a>
             </div>
           </div>
           <div class="project-body">
-            <h3 class="project-title">Project Gamma</h3>
-            <p class="project-desc">A stunning UI/UX focused application built with modern design principles, integrating beautiful animations and interactive elements.</p>
+            <h3 class="project-title">Flappy Bird</h3>
+            <p class="project-desc">A classic Flappy Bird clone built from scratch with vanilla HTML, CSS, and JavaScript — playable live in the browser.</p>
           </div>
           <div class="project-tags">
+            <span class="p-tag">HTML5</span>
             <span class="p-tag">JavaScript</span>
-            <span class="p-tag">CSS3</span>
-            <span class="p-tag">UI/UX</span>
-          </div>
-        </div>
-
-        <div class="project-card glass-card" id="proj-4">
-          <div class="project-header">
-            <div class="project-number">04</div>
-            <div class="project-links">
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-icon-btn" aria-label="GitHub">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              </a>
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn">Visit →</a>
-            </div>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">Project Delta</h3>
-            <p class="project-desc">A cross-platform application built with Flutter and Dart, featuring real-time data sync and an intuitive user experience.</p>
-          </div>
-          <div class="project-tags">
-            <span class="p-tag">Flutter</span>
-            <span class="p-tag">Dart</span>
-            <span class="p-tag">Firebase</span>
+            <span class="p-tag">Game</span>
           </div>
         </div>
       </div>
 
-      <!-- More Projects Button -->
-      <div class="more-projects-wrap" id="more-projects-wrap">
-        <button class="btn-more-projects" id="more-projects-btn" onclick="expandProjects()">
-          <span>More Projects</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-      </div>
-
-      <!-- Extra Projects (hidden initially, scrollable when expanded) -->
-      <div class="extra-projects" id="extra-projects">
-        <div class="extra-projects-grid">
-          <div class="project-card-sm glass-card">
-            <div class="proj-sm-header">
-              <span class="proj-sm-num">05</span>
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn-sm">Visit →</a>
-            </div>
-            <h4>Mini Tool #1</h4>
-            <p>A Python utility application — details coming soon.</p>
-            <div class="project-tags"><span class="p-tag">Python</span></div>
-          </div>
-          <div class="project-card-sm glass-card">
-            <div class="proj-sm-header">
-              <span class="proj-sm-num">06</span>
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn-sm">Visit →</a>
-            </div>
-            <h4>Web App #2</h4>
-            <p>A web-based solution — details coming soon.</p>
-            <div class="project-tags"><span class="p-tag">React</span><span class="p-tag">Node.js</span></div>
-          </div>
-          <div class="project-card-sm glass-card">
-            <div class="proj-sm-header">
-              <span class="proj-sm-num">07</span>
-              <a href="https://github.com/Muniraj-234" target="_blank" class="proj-visit-btn-sm">Visit →</a>
-            </div>
-            <h4>Dashboard #3</h4>
-            <p>An analytics dashboard — details coming soon.</p>
-            <div class="project-tags"><span class="p-tag">JavaScript</span><span class="p-tag">MongoDB</span></div>
-          </div>
-        </div>
-        <div class="github-all-wrap">
-          <a href="https://github.com/Muniraj-234" target="_blank" class="btn btn-ghost" id="github-all-btn">
-            View All on GitHub
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          </a>
-        </div>
+      <div class="github-all-wrap">
+        <a href="https://github.com/Muniraj-234" target="_blank" class="btn btn-ghost" id="github-all-btn">
+          View All on GitHub
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+        </a>
       </div>
     </div>
   </section>
@@ -662,7 +628,6 @@
         </div>
         <div class="contact-form-wrap glass-card">
           <h3>Send a Message</h3>
-          <!-- ACTION: Replace YOUR_FORM_ID below with your Formspree form ID -->
           <form class="contact-form" id="contact-form" action="https://formspree.io/f/mdardady" method="POST" onsubmit="handleContactSubmit(event)">
             <div class="form-group">
               <label for="contact-name">Your Name</label>
@@ -703,6 +668,37 @@
       <p>© 2026 Muniraj K</p>
     </div>
   </footer>
+
+  <!-- ===== AI CHAT WIDGET ===== -->
+  <button class="chat-fab" id="chat-fab" aria-label="Chat with Muniraj's AI assistant">
+    <svg class="chat-fab-icon-open" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <svg class="chat-fab-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+
+  <div class="chat-window glass-card" id="chat-window">
+    <div class="chat-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">MK</div>
+        <div>
+          <strong>Ask about Muniraj</strong>
+          <span>AI assistant · usually instant</span>
+        </div>
+      </div>
+      <button class="chat-close" id="chat-close" aria-label="Close chat">✕</button>
+    </div>
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-msg chat-msg-bot">
+        Hi! I'm an AI assistant that knows all about Muniraj — his skills, projects, and background.
+        Ask me anything, like "What projects has he built?" or "Is he a good fit for a React role?"
+      </div>
+    </div>
+    <form class="chat-input-row" id="chat-form">
+      <input type="text" id="chat-input" placeholder="Ask me anything about Muniraj..." autocomplete="off" required />
+      <button type="submit" class="chat-send-btn" aria-label="Send">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </form>
+  </div>
 
   <script src="script.js"></script>
 </body>

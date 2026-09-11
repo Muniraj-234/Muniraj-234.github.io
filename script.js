@@ -9,6 +9,17 @@ const EMAILJS_PUBLIC_KEY  = 'qklIRydyGAm9JApWV';   // from EmailJS → Account �
 const EMAILJS_SERVICE_ID  = 'service_t28iqy7';   // from EmailJS → Email Services
 const EMAILJS_TEMPLATE_ID = 'template_6w0atyy';  // from EmailJS → Email Templates
 
+/* ===== GEMINI AI CHATBOT — free tier, get a key at https://aistudio.google.com/apikey ===== */
+// NOTE: this key is visible to anyone who views the page source (unavoidable for a
+// static site with no backend). Restrict it to your domain in Google AI Studio /
+// Google Cloud Console (API key → Application restrictions → HTTP referrers) once live.
+const GEMINI_API_KEY = 'AQ.Ab8RN6L7qqgyajqj4jMu2iLFHLMdsS_n9ci3DEnnGgxRsmcWoQ';
+const GEMINI_MODEL    = 'gemini-3.6-flash';
+
+/* ===== SUPABASE — real, shared like counter (see supabase-likes-schema.sql) ===== */
+const SUPABASE_URL      = 'https://aealzulqocmlcidayhwh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFlYWx6dWxxb2NtbGNpZGF5aHdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxMzc4NzMsImV4cCI6MjEwNDcxMzg3M30.DnA2uCA_xJ8Qb6wpVghoM9y9puLQ-vcDPx4VDCvhlG0';
+
 (function initEmailJS() {
   if (typeof emailjs !== 'undefined') {
     emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
@@ -114,10 +125,10 @@ const EMAILJS_TEMPLATE_ID = 'template_6w0atyy';  // from EmailJS → Email Templ
   const words = [
     'amazing web apps',
     'full-stack solutions',
+    'AI-powered applications',
     'scalable backends',
     'stunning UIs',
     'REST APIs',
-    'the future of web',
   ];
   let wi = 0, ci = 0, deleting = false;
   function type() {
@@ -201,19 +212,6 @@ const counterObs = new IntersectionObserver(entries => {
 document.querySelectorAll('.stat-num[data-target]').forEach(el => counterObs.observe(el));
 
 
-/* ===== PROJECTS: EXPAND "MORE PROJECTS" ===== */
-function expandProjects() {
-  const btn   = document.getElementById('more-projects-btn');
-  const extra = document.getElementById('extra-projects');
-  const isOpen = extra.classList.toggle('open');
-  btn.classList.toggle('expanded', isOpen);
-  btn.querySelector('span').textContent = isOpen ? 'Less Projects' : 'More Projects';
-  if (isOpen) {
-    setTimeout(() => extra.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 100);
-  }
-}
-
-
 /* ===== CONTACT FORM — Formspree ===== */
 async function handleContactSubmit(e) {
   e.preventDefault();
@@ -277,35 +275,43 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 });
 
 
-/* ===== LIKE BUTTON SYSTEM ===== */
+/* ===== LIKE BUTTON SYSTEM — real, shared count via Supabase ===== */
 (function initLike() {
   const likeBtn   = document.getElementById('like-btn');
   const likeCount = document.getElementById('like-count');
   const heartIcon = document.getElementById('heart-icon');
 
-  // Load count from localStorage
-  let count = parseInt(localStorage.getItem('mk_portfolio_likes') || '0', 10);
-  let liked = localStorage.getItem('mk_portfolio_liked') === 'true';
+  const sb = (typeof window.supabase !== 'undefined')
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
 
-  likeCount.textContent = count;
+  // This browser's own "have I liked it" flag (separate from the shared count)
+  let liked = localStorage.getItem('mk_portfolio_liked') === 'true';
   if (liked) {
     likeBtn.classList.add('liked');
     heartIcon.setAttribute('fill', 'currentColor');
   }
 
-  window.handleLike = function () {
-    // Prevent multiple likes from same browser session
+  async function loadCount() {
+    if (!sb) return;
+    const { data, error } = await sb.from('portfolio_likes').select('like_count').eq('id', 1).single();
+    if (!error && data) likeCount.textContent = data.like_count;
+  }
+  loadCount();
+
+  window.handleLike = async function () {
     if (liked) {
-      // Already liked — just show the review popup again
+      // Already liked from this browser — just show the review popup again
       openReview();
       return;
     }
-    count++;
-    liked = true;
-    localStorage.setItem('mk_portfolio_likes', count);
-    localStorage.setItem('mk_portfolio_liked', 'true');
+    if (!sb) { openReview(); return; }
 
-    likeCount.textContent = count;
+    const { data, error } = await sb.rpc('increment_portfolio_like');
+    if (!error && typeof data === 'number') likeCount.textContent = data;
+
+    liked = true;
+    localStorage.setItem('mk_portfolio_liked', 'true');
     likeBtn.classList.add('liked');
     heartIcon.setAttribute('fill', 'currentColor');
 
@@ -409,3 +415,171 @@ window.addEventListener('DOMContentLoaded', () => {
   if (homeSection) homeSection.classList.add('in-view');
   updateActiveNav();
 });
+
+
+/* ===== AI CHATBOT — Gemini (free tier) ===== */
+(function initChatbot() {
+  const fab      = document.getElementById('chat-fab');
+  const win      = document.getElementById('chat-window');
+  const closeBtn = document.getElementById('chat-close');
+  const form     = document.getElementById('chat-form');
+  const input    = document.getElementById('chat-input');
+  const messages = document.getElementById('chat-messages');
+
+  // Everything the assistant is allowed to know and say about Muniraj.
+  const SYSTEM_INSTRUCTION = `
+You are the friendly AI assistant embedded on Muniraj K's personal portfolio website.
+You represent Muniraj to recruiters, hiring managers, collaborators, and visitors.
+
+Always speak ABOUT Muniraj in the third person (never pretend to literally be him),
+and always speak of him warmly, confidently, and positively — like an assistant who
+genuinely rates him and is glad to introduce his work. Never invent facts, numbers,
+job titles, employers, or claims that aren't in the profile below. If asked something
+you don't know, say so honestly, stay upbeat, and redirect to what he does bring —
+never say anything negative or discouraging about him.
+
+=== MUNIRAJ K — PROFILE ===
+Role: Full Stack Developer, Team Leader, and aspiring Generative AI Engineer —
+actively building AI-powered web applications and learning every day.
+Education: B.Tech (2nd year) in Computer Science & Engineering at Mahendra
+Institute of Technology (Autonomous), Jul 2025–Jul 2029. Completed Higher
+Secondary (2023–2025) and Secondary Education (2022–2023) under the Tamil Nadu
+State Board, with a strong foundation in Mathematics, Physics, and Computer
+Science.
+Location: Tamil Nadu, India.
+Core skills: Python, HTML5, CSS3, JavaScript, React, MongoDB, Express.js, Node.js
+(the MERN stack).
+AI & cloud skills: Generative AI application development, Google AI Studio,
+Gemini API integration, Google Cloud, Microsoft Copilot — backed by several 2026
+certifications (see below).
+Additional skills: Java, UI/UX design & Figma, SQL, Flutter, Dart.
+Tools & soft skills: Git & GitHub, MS Office, Team Leadership, Problem Solving,
+Communication, Project Management.
+Strengths: a natural team leader who coordinates cross-functional teams, breaks
+down complex problems, and delivers projects on time; enjoys pixel-perfect UI work
+as much as backend architecture and AI experimentation.
+
+Recent certifications (2026): "Build Real World AI Applications with Gemini and
+Imagen" (Google Cloud skill badge), "Develop AI-Powered Prototypes in Google AI
+Studio" (Google Cloud skill badge), "Create Your First Gemini Enterprise
+Application" (Google Cloud skill badge), "AI Tools & Claude Workshop" (be10x),
+7 Microsoft Learn modules on Generative AI & Copilot (via ICT Academy Learnathon
+2026), a 3-hour SQL Hiring Secrets Bootcamp (NoviTech R&D), and AI training at
+Innoknowvex Pvt. Ltd. This chatbot itself — built with the Gemini API — is a live
+example of his AI-integration skills.
+
+Real projects:
+1. Nexora — Smart Waste Management Platform: built for Smart India Hackathon 2026.
+   A full-stack platform made of three progressive web apps — a citizen app, a
+   waste-collector app, and a municipal dashboard. Tech: JavaScript, HTML, CSS.
+   Repo: github.com/Muniraj-234/nexora-sih2026
+2. MIT Club Platform: a full-stack website for his college tech club, live in
+   production, backed by Supabase. Tech: JavaScript, Supabase. Live at
+   mit-club.vercel.app, repo: github.com/Muniraj-234/MIT-CLUB
+3. Flappy Bird: a classic Flappy Bird clone built from scratch with vanilla HTML,
+   CSS, and JavaScript, playable live in the browser via GitHub Pages.
+   Repo: github.com/Muniraj-234/flappy-bird
+
+Contact: email kmuniraj234@gmail.com, GitHub github.com/Muniraj-234, LinkedIn
+linkedin.com/in/mr-muniraj-k-04bb21383. He's currently open to opportunities.
+
+Style rules: keep answers short and conversational (2-4 sentences unless asked for
+detail). Reply in plain conversational text only — do NOT use markdown of any kind
+(no **bold**, no bullet points, no headers, no asterisks). If a visitor seems like a
+recruiter, feel free to proactively mention he's available for opportunities and
+suggest they reach out via the Contact section or email.
+`.trim();
+
+  if (!fab || !win) return;
+
+  let history = [];
+  let isOpen = false;
+
+  function toggleChat(open) {
+    isOpen = open;
+    fab.classList.toggle('open', open);
+    win.classList.toggle('open', open);
+    if (open) setTimeout(() => input.focus(), 250);
+  }
+
+  fab.addEventListener('click', () => toggleChat(!isOpen));
+  closeBtn.addEventListener('click', () => toggleChat(false));
+
+  function addMessage(text, cls) {
+    const div = document.createElement('div');
+    div.className = 'chat-msg ' + cls;
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  function addTyping() {
+    const div = document.createElement('div');
+    div.className = 'chat-typing';
+    div.innerHTML = '<span></span><span></span><span></span>';
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  async function askGemini(userText) {
+    if (!GEMINI_API_KEY || GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY') {
+      throw new Error('missing-key');
+    }
+    history.push({ role: 'user', parts: [{ text: userText }] });
+
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${GEMINI_API_KEY}`;
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        systemInstruction: { parts: [{ text: SYSTEM_INSTRUCTION }] },
+        contents: history,
+        generationConfig: {
+          temperature: 0.8,
+          maxOutputTokens: 1024,
+          thinkingConfig: { thinkingLevel: 'low' },
+        },
+      }),
+    });
+
+    if (!res.ok) throw new Error('api-error-' + res.status);
+    const data = await res.json();
+    let reply = data?.candidates?.[0]?.content?.parts?.map(p => p.text).join('') || '';
+    if (!reply) throw new Error('empty-response');
+    // Safety net in case the model slips in markdown despite instructions
+    reply = reply.replace(/\*\*(.+?)\*\*/g, '$1').replace(/\*(.+?)\*/g, '$1');
+
+    history.push({ role: 'model', parts: [{ text: reply }] });
+    // Keep history bounded so requests don't grow unbounded over a long chat
+    if (history.length > 20) history = history.slice(-20);
+    return reply;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, 'chat-msg-user');
+    input.value = '';
+    input.disabled = true;
+
+    const typing = addTyping();
+    try {
+      const reply = await askGemini(text);
+      typing.remove();
+      addMessage(reply, 'chat-msg-bot');
+    } catch (err) {
+      typing.remove();
+      const msg = err.message === 'missing-key'
+        ? 'The AI assistant isn\'t configured yet — add a free Gemini API key in script.js.'
+        : 'Sorry, I couldn\'t reach the AI assistant right now. Please try again in a moment.';
+      addMessage(msg, 'chat-msg-error');
+    } finally {
+      input.disabled = false;
+      input.focus();
+    }
+  });
+})();
