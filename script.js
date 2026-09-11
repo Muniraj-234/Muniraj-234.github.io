@@ -13,7 +13,7 @@ const EMAILJS_TEMPLATE_ID = 'template_6w0atyy';  // from EmailJS → Email Templ
 // NOTE: this key is visible to anyone who views the page source (unavoidable for a
 // static site with no backend). Restrict it to your domain in Google AI Studio /
 // Google Cloud Console (API key → Application restrictions → HTTP referrers) once live.
-const GEMINI_API_KEY = 'AQ.Ab8RN6L7qqgyajqj4jMu2iLFHLMdsS_n9ci3DEnnGgxRsmcWoQ';
+const GEMINI_API_KEY = 'AQ.Ab8RN6Kzlg8Xpz53IrYLjE0CX7U7kcXWfBdPPmb12ipKq6OBqg';
 const GEMINI_MODEL    = 'gemini-3.6-flash';
 
 /* ===== SUPABASE — real, shared like counter (see supabase-likes-schema.sql) ===== */
